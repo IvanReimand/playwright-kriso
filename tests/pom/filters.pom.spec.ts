@@ -6,34 +6,20 @@
  *   - No raw selectors in test files — all locators live in page classes
  *   - Use only: getByRole, getByText, getByPlaceholder, getByLabel
  */
-import { test, expect } from '@playwright/test';
-import type { Page } from '@playwright/test';
-import { HomePage } from '../../pages/HomePage';
+import { test } from '../fixtures';
 
 test.describe.configure({ mode: 'serial' });
 
-let page: Page;
-let homePage: HomePage;
-
 test.describe('Navigate Products via Filters (POM)', () => {
 
-  test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext();
-    page = await context.newPage();
-
-    homePage = new HomePage(page);
-
-    await homePage.openUrl();
-    await homePage.acceptCookies();
+  test.beforeEach(async ({ home }) => {
+    await home.openUrl();
+    await home.acceptCookies();
   });
 
-  test.afterAll(async () => {
-    await page.context().close();
-  });
-
-  test('Test filter products and verify results', async () => {
-    await homePage.searchByKeyword('tolkien');
-    await homePage.verifyResultsCountMoreThan(0);
+  test('Test filter products and verify results', async ({ home }) => {
+    await home.searchByKeyword('tolkien');
+    await home.verifyResultsCountMoreThan(0);
   });
 
 });

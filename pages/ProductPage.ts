@@ -1,12 +1,19 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class ProductPage {
-  // TODO: define locators
+  private readonly productTitle: Locator;
+  private readonly addToCartLink: Locator;
 
   constructor(private page: Page) {
-    // TODO: initialize locators
+    this.productTitle = this.page.locator('h1').first();
+    this.addToCartLink = this.page.getByRole('link', { name: /Lisa ostukorvi/i }).first();
   }
 
-  // TODO: implement action methods (e.g. addToCart)
-  // TODO: add locator getters for assertions
+  async verifyProductTitleContains(keyword: string) {
+    await expect(this.productTitle).toContainText(keyword, { timeout: 10000 });
+  }
+
+  async addToCart() {
+    await this.addToCartLink.click();
+  }
 }
