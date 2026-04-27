@@ -1,6 +1,6 @@
 /**
  * Part II — Page Object Model tests
- * Test suite: Search for Books by Keywords
+ * Test suite: Add Books to Shopping Cart
  *
  * Rules:
  *   - No raw selectors in test files — all locators live in page classes

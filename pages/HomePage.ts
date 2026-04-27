@@ -17,15 +17,16 @@ export class HomePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.resultsTotal = this.page.locator('.sb-results-total');
+    this.resultsTotal = this.page.locator('.sb-results-total').first();
     this.addToCartLink = this.page.getByRole('link', { name: 'Lisa ostukorvi' });
     this.addToCartMessage = this.page.locator('.item-messagebox');
     this.cartCount = this.page.locator('.cart-products');
     this.backButton = this.page.locator('.cartbtn-event.back');
     this.forwardButton = this.page.locator('.cartbtn-event.forward');
     this.noResultsMessage = this.page.locator('.msg.msg-info');
+  }
 
-    async openUrl() {
+  async openUrl() {
     await this.page.goto(this.url);
   }
 

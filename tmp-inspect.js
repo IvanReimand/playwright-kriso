@@ -1,0 +1,20 @@
+const { chromium } = require('playwright');
+(async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto('https://www.kriso.ee/');
+  const accept = page.getByRole('button', { name: 'Nõustun' });
+  if (await accept.isVisible()) await accept.click();
+  const input = page.getByRole('textbox', { name: /Pealkiri, autor, ISBN, märksõ/i });
+  console.log('input visible', await input.isVisible());
+  await input.fill('tolkien');
+  await page.getByRole('button', { name: 'Search' }).click();
+  await page.waitForTimeout(3000);
+  const body = await page.locator('body').innerText();
+  console.log('body sample', body.slice(0, 500));
+  const results = await page.locator('text=/Otsingu vasteid leitud:/i').allTextContents();
+  console.log('results summary locator count', results.length, results);
+  const totalText = await page.locator('.sb-results-total').allTextContents();
+  console.log('.sb-results-total count', totalText.length, totalText);
+  await browser.close();
+})();

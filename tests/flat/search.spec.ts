@@ -11,7 +11,7 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-const searchInputName = /Pealkiri, autor, ISBN, märksõ/i;
+const searchInputName = /Pealkiri, autor, ISBN, (märksõna|mrksna)/i;
 
 test.describe('Search for Books by Keywords', () => {
 
@@ -33,7 +33,7 @@ test.describe('Search for Books by Keywords', () => {
   test('finds books by keyword and ISBN', async ({ page }) => {
     await searchByKeyword(page, 'tolkien');
 
-    const resultsSummary = page.getByText(/Otsingu vasteid leitud:\s*\d+/);
+    const resultsSummary = page.getByText(/Otsingu vasteid leitud:\s*\d+/).first();
     await expect(resultsSummary).toBeVisible();
 
     const resultsCount = extractResultsCount(await resultsSummary.innerText());
@@ -45,7 +45,7 @@ test.describe('Search for Books by Keywords', () => {
     const keywordMentions = page.getByText(/tolkien/i);
     expect(await keywordMentions.count()).toBeGreaterThanOrEqual(await visibleResults.count());
 
-    await page.getByRole('link', { name: 'Täpsem otsing' }).click();
+    await page.getByRole('link', { name: /T.?psem otsing/i }).click();
 
     const isbnField = page.getByRole('textbox', { name: 'ISBN', exact: true });
     await isbnField.fill('9780307588371');
